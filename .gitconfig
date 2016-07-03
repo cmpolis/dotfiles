@@ -1,0 +1,55 @@
+[user]
+	name = xxx
+	email = xxx
+
+[alias]
+
+	## Start a story with a new branch ##
+	cob = checkout -b
+
+	## list recent branches ##
+	recent = !git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads/ | head -10
+
+	## hack and commit often in branch ##
+	c = commit -m
+	a = add
+	aa= !git add -u && git add . && git status ; removes deleted, stages files, prints status
+	ca = commit --amend -C HEAD ; append to previous commit
+
+
+	## pull in upstream changes ##
+	up = !git fetch origin && git rebase origin/master
+
+	## publish/push branch to origin ##
+	pub = !sh -c 'git push origin `git rev-parse --abbrev-ref HEAD`'
+
+	## clean up history - squash tiny commits into bigger commit ##
+	ir = !git rebase -i origin/master
+
+	## create github pull-request ##
+	pr = !sh -c 'open "https://github.com/xxx/`echo '${PWD##*/}'`/pull/new/`git rev-parse --abbrev-ref HEAD`"'
+
+	## done! fetch upstream, rebase, swtich to master, merge & push to origin ##
+	done = !git checkout master && git pull
+
+	## delete branch local & remote ##
+	rmb = !sh -c 'git branch -D $1 && git push origin :$1' -
+
+  ## better git log ##
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+
+[core]
+	editor = vim
+	excludesfile = /Users/chris/.gitignore
+[pack]
+	windowMemory = 32m
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true

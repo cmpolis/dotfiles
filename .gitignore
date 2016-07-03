@@ -1,0 +1,5 @@
+# VIM junk
+*.sw?
+
+# Mac junk
+.DS_Store
